@@ -32,26 +32,6 @@ A Python desktop application that simulates authentic flip-digit panels with rea
 2. Access customization options through the **File > Customize** menu
 3. Upload images, display text, show digital clock, or experiment with settings
 
-## File Structure
-
-```
-flipdigit_wallpaper/
-│
-├── main.py                    # Main application entry point
-├── assets/
-│   └── click.mp3             # Sound effect file (user provided)
-├── ui/
-│   ├── __init__.py
-│   └── customization.py      # Customization interface
-├── panels/
-│   ├── __init__.py
-│   └── flip_digit_board.py   # Core flip digit display logic
-├── processing/
-│   ├── __init__.py
-│   └── image_processor.py    # Image processing with OpenCV
-├── requirements.txt          # Dependencies
-└── README.md                # This file
-```
 
 ## Controls
 
@@ -76,6 +56,5 @@ flipdigit_wallpaper/
 ## Notes
 
 - The application is designed for Windows
-- Sound effects require an MP3 file named `click.mp3` in the `assets` folder
 - Images are automatically resized and converted to black/white for optimal display
 - Multiple sound effects can overlap for realistic clicking during rapid changes
