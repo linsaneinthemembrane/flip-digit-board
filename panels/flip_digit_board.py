@@ -20,6 +20,27 @@ class FlipDigitBoard(QWidget):
         self.animation_speed = 5
         self.show_grid = True
         # Example patterns, fill in from e.g. Wikipedia: https://en.wikipedia.org/wiki/Fourteen-segment_display#Character_encoding
+        """    ----------a----------
+               |\        |        /|
+               | \       |       / |
+               |  \      |      /  |
+               |   h     l     i   |
+               f    \    |    /    b
+               |     \   |   /     |
+               |      \  |  /      |
+               |       \ | /       |
+               |---g1----|----g2---|
+               |       / | \       |
+               |      /  |  \      |
+               |     /   |   \     |               
+               e    /    |    \    c
+               |   j     m     k   |
+               |  /      |      \  |
+               | /       |       \ |
+               |/        |        \|
+               ----------d----------
+               """
+        
         self.fourteen_seg_digits = {
             ' ': [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 
