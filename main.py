@@ -13,42 +13,42 @@ class FlipDigitWallpaperApp(QMainWindow):
         self.setWindowTitle("FlipDigit Display")
         self.setGeometry(100, 100, 1080, 720)
         
-        # Initialize pygame mixer for sound
+        # initialize pygame mixer for sound
         pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
         pygame.mixer.set_num_channels(50)
         
-        # Load click sound
+        # click sound
         try:
             self.click_sound = pygame.mixer.Sound("assets/click.mp3")
         except:
             print("Warning: click.mp3 not found in assets/ folder")
             self.click_sound = None
             
-        # Create central widget and layout
+        # create central widget and layout
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         layout = QVBoxLayout(central_widget)
         
-        # Create flip digit board
+        # create flip digit board
         self.flip_board = FlipDigitBoard(self, sound=self.click_sound)
         layout.addWidget(self.flip_board)
         
-        # Create menu bar
+        # create menu bar
         self.create_menu_bar()
         
-        # Create customization window (separate window)
+        # create customization separate window
         self.customization_window = CustomizationWindow(self)
         
-        # Apply custom dark theme
+        # apply custom dark theme
         self.apply_custom_theme()
         
-        # Show customization window on startup
+        # show customization window on startup
         self.customization_window.show()
         
     def create_menu_bar(self):
         menubar = self.menuBar()
         
-        # View menu
+        # view menu
         view_menu = menubar.addMenu('View')
         
         customize_action = QAction('Toggle Controls', self)
@@ -73,7 +73,7 @@ class FlipDigitWallpaperApp(QMainWindow):
         """Apply your portfolio colors to the app"""
         palette = QPalette()
         
-        # Your custom colors
+        # theme colors
         bg_color = QColor(15, 23, 42)      # #0f172a
         text_color = QColor(148, 163, 184)  # #94a3b8
         heading_color = QColor(226, 232, 240) # #e2e8f0
@@ -101,7 +101,7 @@ class FlipDigitWallpaperApp(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setStyle("Fusion")  # Use Fusion style for better dark theme support
+    app.setStyle("Fusion") 
     
     window = FlipDigitWallpaperApp()
     window.show()

@@ -12,14 +12,15 @@ class FlipDigitBoard(QWidget):
         super().__init__(parent)
         self.cols = cols
         self.rows = rows
-        self.cell_size = 32  # Adjust for node size
+        self.cell_size = 32  # experiment for readability
         self.sound = sound
         self.sound_enabled = True
         self.invert_colors = False
         self.inverted_state = False
         self.animation_speed = 5
         self.show_grid = True
-        # Example patterns, fill in from e.g. Wikipedia: https://en.wikipedia.org/wiki/Fourteen-segment_display#Character_encoding
+
+        # fill in 14-segment patterns for ASCII characters based on the following template:
             #    ----------a----------
             #    |\        |        /|
             #    | \       |       / |
@@ -40,7 +41,6 @@ class FlipDigitBoard(QWidget):
             #    |/        |        \|
             #    ----------d----------
            
-        
         self.fourteen_seg_digits = {
             ' ': [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 
@@ -102,6 +102,7 @@ class FlipDigitBoard(QWidget):
         self.total_changes_needed = 0
         self.setMinimumSize(self.cols * self.cell_size, self.rows * self.cell_size)
 
+
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
@@ -120,6 +121,7 @@ class FlipDigitBoard(QWidget):
                     grid_color
                 )
 
+
     def get_fourteen_segment_shapes(self, col, row, cell_size):
         x = col * cell_size
         y = row * cell_size
@@ -134,57 +136,41 @@ class FlipDigitBoard(QWidget):
         return [
             # a (top horizontal)
             [(x+th, y), (x+w-th, y), (x+w-th, y+th), (x+th, y+th)],
-
             # b (upper right vertical)
             [(x+w-th, y+th), (x+w, y+th), (x+w, y+h//2-th//2), (x+w-th, y+h//2-th//2)],
-
             # c (lower right vertical)
             [(x+w-th, y+h//2+th//2), (x+w, y+h//2+th//2), (x+w, y+h-th), (x+w-th, y+h-th)],
-
             # d (bottom horizontal)
             [(x+th, y+h-th), (x+w-th, y+h-th), (x+w-th, y+h), (x+th, y+h)],
-
             # e (lower left vertical)
             [(x, y+h//2+th//2), (x+th, y+h//2+th//2), (x+th, y+h-th), (x, y+h-th)],
-
             # f (upper left vertical)
             [(x, y+th), (x+th, y+th), (x+th, y+h//2-th//2), (x, y+h//2-th//2)],
-
             # g1 (middle horizontal left)
             [(x+th+mh_pad, y+h//2-th//2), (x+w//2-mh_pad, y+h//2-th//2),
             (x+w//2-mh_pad, y+h//2+th//2), (x+th+mh_pad, y+h//2+th//2)],
-
             # g2 (middle horizontal right)
             [(x+w//2+mh_pad, y+h//2-th//2), (x+w-th-mh_pad, y+h//2-th//2),
             (x+w-th-mh_pad, y+h//2+th//2), (x+w//2+mh_pad, y+h//2+th//2)],
-
-
             # h (upper left diagonal)
             [(x+th, y+th), (x+2*th, y+2*th),
             (x+w//2-2*th, y+h//2-2*th), (x+w//2-th, y+h//2-th)],
-
             # i (upper right diagonal)
             [(x+w-th, y+th), (x+w-2*th, y+2*th),
             (x+w//2+th, y+h//2-th), (x+w//2+2*th, y+h//2-2*th)],
-
             # j (lower left diagonal)
             [(x+th, y+h-th), (x+2*th, y+h-2*th),
             (x+w//2-2*th, y+h//2+2*th), (x+w//2-th, y+h//2+th)],
-
             # k (lower right diagonal)
             [(x+w-th, y+h-th), (x+w-2*th, y+h-2*th),
             (x+w//2+2*th, y+h//2+2*th), (x+w//2+th, y+h//2+th)],
-
             # l (center vertical top)
             [(mid_x - th//2, y + th), (mid_x + th//2, y + th),
             (mid_x + th//2, mid_y - 1), (mid_x - th//2, mid_y - 1)],
-
             # m (center vertical bottom)
             [(mid_x - th//2, mid_y + 1), (mid_x + th//2, mid_y + 1),
             (mid_x + th//2, y + h - th), (mid_x - th//2, y + h - th)]
         ]
-
-
 
 
     def draw_fourteen_segment(self, painter, col, row, segments, active_color, grid_color):
@@ -200,8 +186,8 @@ class FlipDigitBoard(QWidget):
                     painter.setPen(QPen(grid_color, 1))
                     painter.setBrush(Qt.NoBrush)
                     painter.drawPolygon(points)
-
     
+
     def bitmap_to_segments(self, bitmap):
         """Convert a bitmap to 7-segment patterns using intelligent analysis"""
         result = np.zeros((bitmap.shape[0], bitmap.shape[1], 14), dtype=int)
@@ -215,6 +201,7 @@ class FlipDigitBoard(QWidget):
                     
         return result
     
+
     def analyze_pixel_for_segments(self, bitmap, row, col):
         """Analyze a pixel's neighborhood to determine which 14-segments to activate."""
         segments = [0] * 14  # A–M
@@ -317,7 +304,8 @@ class FlipDigitBoard(QWidget):
         except Exception as e:
             print(f"Error in text_to_bitmap: {e}")
             return np.zeros((target_height or 12, target_width or len(text) * 6), dtype=int)
-    
+
+
     def set_large_text(self, text, animate=True):
         """Display large text using automatic font rendering with proper 14-segment mapping"""
         self.target_state.fill(0)
@@ -345,13 +333,14 @@ class FlipDigitBoard(QWidget):
                     self.target_state[target_row, target_col] = segments[row_idx, col_idx]
 
         if self.inverted_state:
-            self.target_state = 1 - self.target_state  # <-- ENSURE INVERSION IS PERSISTENT
+            self.target_state = 1 - self.target_state  # <-- ensures inversion stays that way
 
         if animate:
             self.start_animation()
         else:
             self.board_state = self.target_state.copy()
             self.update()
+
 
     def set_todo_list(self, items, animate=True):
         # Fill the grid with spaces, then place one todo item per row, left-aligned
@@ -396,6 +385,7 @@ class FlipDigitBoard(QWidget):
             self.board_state = self.target_state.copy()
             self.update()
 
+
     def set_image(self, image_array, animate=True):
         """Convert image to flip digit representation with proper 14-segment mapping"""
         self.target_state.fill(0)
@@ -417,7 +407,7 @@ class FlipDigitBoard(QWidget):
         self.target_state = segments
 
         if self.inverted_state:
-            self.target_state = 1 - self.target_state  # <-- ENSURE INVERSION IS PERSISTENT
+            self.target_state = 1 - self.target_state  # <-- ensures inversion stays that way
 
         if animate:
             self.start_animation()
@@ -437,7 +427,8 @@ class FlipDigitBoard(QWidget):
         self.total_changes_needed = np.sum(self.board_state != self.target_state)
         self.animation_step_count = 0
         self.animation_timer.start(max(5, self.animation_speed))
-        
+
+
     def animate_step(self):
         """Perform one step of animation"""
         diff = self.board_state != self.target_state 
@@ -477,12 +468,13 @@ class FlipDigitBoard(QWidget):
                     channel.play(self.sound)
                     
         self.update()
-        
+
+
     def clear_display(self):
         """Clear the entire display"""
         self.target_state.fill(0)
         if self.inverted_state:
-            self.target_state = 1 - self.target_state  # <-- ENSURE INVERSION IS PERSISTENT
+            self.target_state = 1 - self.target_state  # <-- ensures inversion stays that way
         self.start_animation()
 
         
@@ -490,6 +482,7 @@ class FlipDigitBoard(QWidget):
         """Toggle sound effects"""
         self.sound_enabled = enabled
         
+
     def set_invert_colors(self, invert):
         # If switching ON, flip board_state/target_state
         # If switching OFF, just update the flag (future updates are not inverted)
